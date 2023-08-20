@@ -96,6 +96,7 @@ filename = name.replace("/","_").replace(":","_")
 
 file = open(filename+".txt","w")
 file.write(str(results))
+file.close()
 
 winsound.Beep(500,750)
 print("Complete!")

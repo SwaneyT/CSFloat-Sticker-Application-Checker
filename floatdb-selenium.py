@@ -50,10 +50,7 @@ def getCount(driver,delay2,data1):
     except Exception as error:
         print("UNKNOWN ERROR!!!!!")
         getCount(driver,300,data1)
-    
-    # except Exception as error:
-    #     print("UNKNOWN ERROR!!!!!",error)
-    #     getCount(driver,300,data1)
+
 
 WebDriverWait(driver,20).until(EC.element_to_be_clickable((By.XPATH, "//img[@src='assets/login-steam.png']"))).click()
 WebDriverWait(driver, delay).until(EC.presence_of_element_located((By.CLASS_NAME, 'avatar')))

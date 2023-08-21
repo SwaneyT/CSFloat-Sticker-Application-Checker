@@ -5,8 +5,6 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import chromedriver_autoinstaller
-import getpass
-import contextlib
 import re
 import json
 import datetime

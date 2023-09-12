@@ -5,10 +5,14 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import chromedriver_autoinstaller
+import getpass
+import contextlib
 import re
 import json
 import datetime
 import winsound
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
 
 stickers = {
     "rmr2020_team_vita": 4701,
@@ -17,14 +21,14 @@ stickers = {
     "rmr2020_team_vita_gold": 4704,
 }
 
-
-
-chromedriver_autoinstaller.install()
-driver = webdriver.Chrome()
+driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
 driver.get("https://csfloat.com/db")
 driver.delete_all_cookies()
 
+#all_rmr_ids = [4701, 4702, 4703, 4704, 4705, 4706, 4707, 4708, 4709, 4710, 4711, 4712, 4713, 4714, 4715, 4716, 4717, 4718, 4719, 4720, 4721, 4722, 4723, 4724, 4725, 4726, 4727, 4728, 4729, 4730, 4731, 4732, 4733, 4734, 4735, 4736, 4737, 4738, 4739, 4740, 4741, 4742, 4743, 4744, 4745, 4746, 4747, 4748, 4749, 4750, 4751, 4752, 4753, 4754, 4755, 4756, 4757, 4758, 4759, 4760, 4761, 4762, 4763, 4764, 4765, 4766, 4767, 4768, 4769, 4770, 4771, 4772, 4773, 4774, 4775, 4776, 4777, 4778, 4779, 4780, 4781, 4782, 4783, 4784, 4785, 4786, 4787, 4788, 4789, 4790, 4791, 4792, 4793, 4794, 4795, 4796]
+sticker_ids = [4701, 4702, 4703]
 results = []
+
 delay = 1800
 delay2 = 45
 
@@ -50,7 +54,10 @@ def getCount(driver,delay2,data1):
     except Exception as error:
         print("UNKNOWN ERROR!!!!!")
         getCount(driver,300,data1)
-
+    
+    # except Exception as error:
+    #     print("UNKNOWN ERROR!!!!!",error)
+    #     getCount(driver,300,data1)
 
 WebDriverWait(driver,20).until(EC.element_to_be_clickable((By.XPATH, "//img[@src='assets/login-steam.png']"))).click()
 WebDriverWait(driver, delay).until(EC.presence_of_element_located((By.CLASS_NAME, 'avatar')))
@@ -91,7 +98,6 @@ filename = name.replace("/","_").replace(":","_")
 
 file = open(filename+".txt","w")
 file.write(str(results))
-file.close()
 
 winsound.Beep(500,750)
 print("Complete!")

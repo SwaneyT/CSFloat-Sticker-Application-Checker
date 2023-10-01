@@ -25,10 +25,7 @@ driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install())
 driver.get("https://csfloat.com/db")
 driver.delete_all_cookies()
 
-#all_rmr_ids = [4701, 4702, 4703, 4704, 4705, 4706, 4707, 4708, 4709, 4710, 4711, 4712, 4713, 4714, 4715, 4716, 4717, 4718, 4719, 4720, 4721, 4722, 4723, 4724, 4725, 4726, 4727, 4728, 4729, 4730, 4731, 4732, 4733, 4734, 4735, 4736, 4737, 4738, 4739, 4740, 4741, 4742, 4743, 4744, 4745, 4746, 4747, 4748, 4749, 4750, 4751, 4752, 4753, 4754, 4755, 4756, 4757, 4758, 4759, 4760, 4761, 4762, 4763, 4764, 4765, 4766, 4767, 4768, 4769, 4770, 4771, 4772, 4773, 4774, 4775, 4776, 4777, 4778, 4779, 4780, 4781, 4782, 4783, 4784, 4785, 4786, 4787, 4788, 4789, 4790, 4791, 4792, 4793, 4794, 4795, 4796]
-sticker_ids = [4701, 4702, 4703]
 results = []
-
 delay = 1800
 delay2 = 45
 
@@ -64,6 +61,7 @@ WebDriverWait(driver, delay).until(EC.presence_of_element_located((By.CLASS_NAME
 print("Session Ready!")
 for name,sticker in stickers.items():
     total_applied=0
+    deduct_amount=0
     for i in range(5,0,-1):
         data=[]
         count=None
@@ -81,10 +79,9 @@ for name,sticker in stickers.items():
         
         if total_applied>0:
             print("Deducting",deduct_amount)
-            extracted_count = extracted_count - deduct_amount
         
-        print("Adding to total:",(extracted_count * i),"sticker applications")
-        total_applied = total_applied + (extracted_count * i)
+        print("Adding to total:",((extracted_count - deduct_amount) * i),"sticker applications")
+        total_applied = total_applied + ((extracted_count - deduct_amount) * i)
         deduct_amount = extracted_count
         print("Total applications:",total_applied)
     results.append([name,total_applied])

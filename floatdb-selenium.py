@@ -233,7 +233,7 @@ for name,sticker in stickers.items():
         if extracted_count > 40000:
             splitted_total = 0
 
-            number_of_searches = math.floor((extracted_count / 40000) * 1.47) #1.47 is arbitrary, experiment with it
+            number_of_searches = math.ceil((extracted_count / 40000) * 1.44) #1.47 is arbitrary, experiment with it
             #Calculate. (Maybe count / 40k ) * 1.3 (always rounded up)
 
             all_search_nums = multiple_weighted_average(floats,weights,number_of_searches)

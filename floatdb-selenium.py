@@ -21,35 +21,35 @@ from webdriver_manager.chrome import ChromeDriverManager
 from subprocess import CREATE_NO_WINDOW
 
 stickers = {
-    "rmr2020_team_vita": 4701,
+#    "rmr2020_team_vita": 4701,
     # "rmr2020_team_vita_holo": 4702,
     # "rmr2020_team_vita_foil": 4703,
     # "rmr2020_team_vita_gold": 4704,
-    "rmr2020_team_hero": 4705,
+#    "rmr2020_team_hero": 4705,
     # "rmr2020_team_hero_holo": 4706,
     # "rmr2020_team_hero_foil": 4707,
     # "rmr2020_team_hero_gold": 4708,    
-    "rmr2020_team_nip": 4709,
+#    "rmr2020_team_nip": 4709,
     # "rmr2020_team_nip_holo": 4710,
     # "rmr2020_team_nip_foil": 4711,
     # "rmr2020_team_nip_gold": 4712,
-    "rmr2020_team_astr": 4713,
+#    "rmr2020_team_astr": 4713,
     # "rmr2020_team_astr_holo": 4714,
     # "rmr2020_team_astr_foil": 4715,
     # "rmr2020_team_astr_gold": 4716,
-    "rmr2020_team_big": 4717,
+#    "rmr2020_team_big": 4717,
     # "rmr2020_team_big_holo": 4718,
     # "rmr2020_team_big_foil": 4719,
     # "rmr2020_team_big_gold": 4720,
-    "rmr2020_team_fntc": 4721,
+#    "rmr2020_team_fntc": 4721,
     # "rmr2020_team_fntc_holo": 4722,
     # "rmr2020_team_fntc_foil": 4723,
     # "rmr2020_team_fntc_gold": 4724,
-    "rmr2020_team_g2": 4725,
+#    "rmr2020_team_g2": 4725,
     # "rmr2020_team_g2_holo": 4726,
     # "rmr2020_team_g2_foil": 4727,
     # "rmr2020_team_g2_gold": 4728,
-    "rmr2020_team_og": 4729,
+#    "rmr2020_team_og": 4729,
     # "rmr2020_team_og_holo": 4730,
     # "rmr2020_team_og_foil": 4731,
     # "rmr2020_team_og_gold": 4732,
@@ -121,8 +121,6 @@ stickers = {
 
 
 
-#chromedriver_autoinstaller.install()
-#driver = webdriver.Chrome()
 options = webdriver.ChromeOptions() 
 options.add_argument("--log-level=3")
 options.add_argument('--headless')
@@ -157,7 +155,12 @@ def getCount(driver,timeout_timer,data1,float1,float2):
             return extracted_count
         
         except TimeoutException:
-            print("Too many requests...")
+            if "too many requests" in driver.page_source:
+                print("Too many requests. Trying again.")
+            elif "verify" in driver.page_source:
+                print("Unable to verify recaptcha. Trying again.")
+            else:
+                print("Unknown status on page.......")
             return "Fail"
     except Exception as error:
         print("Unknown Error, retrying...")

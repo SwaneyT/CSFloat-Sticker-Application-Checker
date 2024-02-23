@@ -16,40 +16,43 @@ import math
 import numpy
 import time
 import pwinput
-from selenium.webdriver.chrome.service import Service as ChromeService
-from webdriver_manager.chrome import ChromeDriverManager
+import os
+# from selenium.webdriver.chrome.service import Service as ChromeService
+# from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.firefox.service import Service
 from subprocess import CREATE_NO_WINDOW
 
 stickers = {
-#    "rmr2020_team_vita": 4701,
+    "rmr2020_team_vita": 4701,
     # "rmr2020_team_vita_holo": 4702,
     # "rmr2020_team_vita_foil": 4703,
     # "rmr2020_team_vita_gold": 4704,
-#    "rmr2020_team_hero": 4705,
+    "rmr2020_team_hero": 4705,
     # "rmr2020_team_hero_holo": 4706,
     # "rmr2020_team_hero_foil": 4707,
     # "rmr2020_team_hero_gold": 4708,    
-#    "rmr2020_team_nip": 4709,
+    "rmr2020_team_nip": 4709,
     # "rmr2020_team_nip_holo": 4710,
     # "rmr2020_team_nip_foil": 4711,
     # "rmr2020_team_nip_gold": 4712,
-#    "rmr2020_team_astr": 4713,
+    "rmr2020_team_astr": 4713,
     # "rmr2020_team_astr_holo": 4714,
     # "rmr2020_team_astr_foil": 4715,
     # "rmr2020_team_astr_gold": 4716,
-#    "rmr2020_team_big": 4717,
+    "rmr2020_team_big": 4717,
     # "rmr2020_team_big_holo": 4718,
     # "rmr2020_team_big_foil": 4719,
     # "rmr2020_team_big_gold": 4720,
-#    "rmr2020_team_fntc": 4721,
+    "rmr2020_team_fntc": 4721,
     # "rmr2020_team_fntc_holo": 4722,
     # "rmr2020_team_fntc_foil": 4723,
     # "rmr2020_team_fntc_gold": 4724,
-#    "rmr2020_team_g2": 4725,
+    "rmr2020_team_g2": 4725,
     # "rmr2020_team_g2_holo": 4726,
     # "rmr2020_team_g2_foil": 4727,
     # "rmr2020_team_g2_gold": 4728,
-#    "rmr2020_team_og": 4729,
+    "rmr2020_team_og": 4729,
     # "rmr2020_team_og_holo": 4730,
     # "rmr2020_team_og_foil": 4731,
     # "rmr2020_team_og_gold": 4732,
@@ -120,16 +123,23 @@ stickers = {
 }
 
 
+################ CHROME SELENIUM (MEMORY LEAK ISSUE) ####################
+# options = webdriver.ChromeOptions() 
+# # options.add_argument("--log-level=3")
+# # options.add_argument('--headless')
+# # options.add_argument('--disable-gpu')
+# chrome_service = ChromeService(ChromeDriverManager().install())
+# chrome_service.creation_flags = CREATE_NO_WINDOW
+# driver = webdriver.Chrome(options=options, service=chrome_service)
+# driver.get("https://csfloat.com/db")
+# driver.delete_all_cookies()
 
-options = webdriver.ChromeOptions() 
-options.add_argument("--log-level=3")
-options.add_argument('--headless')
-options.add_argument('--disable-gpu')
-chrome_service = ChromeService(ChromeDriverManager().install())
-chrome_service.creation_flags = CREATE_NO_WINDOW
-driver = webdriver.Chrome(options=options, service=chrome_service)
-driver.get("https://csfloat.com/db")
-driver.delete_all_cookies()
+options = Options()
+options.add_argument("-headless")
+service = Service("C:\Program Files\Mozilla Firefox\\geckodriver.exe") #change with path to firefox driver (https://github.com/mozilla/geckodriver/releases/tag/v0.34.0)
+driver = webdriver.Firefox(options=options, service=service)
+driver.get("https://csfloat.com")
+print("Headless Firefox Initialized")
 
 #all_rmr_ids = [4701, 4702, 4703, 4704, 4705, 4706, 4707, 4708, 4709, 4710, 4711, 4712, 4713, 4714, 4715, 4716, 4717, 4718, 4719, 4720, 4721, 4722, 4723, 4724, 4725, 4726, 4727, 4728, 4729, 4730, 4731, 4732, 4733, 4734, 4735, 4736, 4737, 4738, 4739, 4740, 4741, 4742, 4743, 4744, 4745, 4746, 4747, 4748, 4749, 4750, 4751, 4752, 4753, 4754, 4755, 4756, 4757, 4758, 4759, 4760, 4761, 4762, 4763, 4764, 4765, 4766, 4767, 4768, 4769, 4770, 4771, 4772, 4773, 4774, 4775, 4776, 4777, 4778, 4779, 4780, 4781, 4782, 4783, 4784, 4785, 4786, 4787, 4788, 4789, 4790, 4791, 4792, 4793, 4794, 4795, 4796]
 results = []
@@ -137,10 +147,12 @@ results = []
 delay = 1800
 delay2 = 25
 
-
 def getCount(driver,timeout_timer,data1,float1,float2):
-    print("Trying...")
-    driver.get(f"https://csgofloat.com/db?min={float1}&max={float2}&stickers={data1}")
+    print("Loading page...")
+    try:
+        driver.get(f"https://csgofloat.com/db?min={float1}&max={float2}&stickers={data1}")
+    except:
+        print("Error while getting page... seems driver is closed")
     try:
         myElem1 = WebDriverWait(driver, timeout_timer).until(EC.presence_of_element_located((By.CSS_SELECTOR, 'mat-card.count')))
         print(myElem1.text)
@@ -161,6 +173,7 @@ def getCount(driver,timeout_timer,data1,float1,float2):
                 print("Unable to verify recaptcha. Trying again.")
             else:
                 print("Unknown status on page.......")
+                time.sleep(30)
             return "Fail"
     except Exception as error:
         print("Unknown Error, retrying...")
@@ -284,7 +297,7 @@ for name,sticker in stickers.items():
                         while splitted_result2 == "Fail":
                             print("Sleeping 10 seconds")
                             time.sleep(10)
-                            splitted_result = getCount(driver,30,data1,search_num1,search_num2) #False means too many requests, this will make it retry for as long as its "false"
+                            splitted_result2 = getCount(driver,30,data1,search_num1,search_num2) #False means too many requests, this will make it retry for as long as its "false"
                         
                         splitted_result += splitted_result2
                         
